@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define BUFFER_SIZE 10
+
+int main()
+{
+    printf("This program will convert a number from one base to another.\n");
+    int num = 317547;
+    int newbase = 16;
+    char buffer[BUFFER_SIZE];
+    int index = BUFFER_SIZE-1;
+
+    printf("Converting from base %d to %d\n", 10, newbase);
+    int quotient = num;
+    int remainder;
+    do
+    {
+        remainder = quotient%newbase;
+        quotient = quotient/newbase;
+        if(remainder < 9)
+        {
+            buffer[index--] = remainder+'0';
+        }
+        else
+        {
+            buffer[index--] = remainder-10+'A';
+        }
+    }
+    while(quotient > newbase);
+
+    if(quotient < 9)
+    {
+        buffer[index--] = quotient+'0';
+    }
+    else
+    {
+        buffer[index--] = quotient-10+'A';
+    }
+
+    for(int i = index, i >= 0, i--)
+    {
+        putchar(buffer[i]);
+    }
+
+    return 0;
+}
