@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1505375540 source:c:\users\svu\google drive\courses\programming i\testcode\arithmeticassignmentoperators\main.c
+	<stdio.h>
+	<stdlib.h>
+
