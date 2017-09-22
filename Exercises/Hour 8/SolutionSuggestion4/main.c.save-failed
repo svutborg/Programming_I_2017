@@ -1,0 +1,109 @@
+/* Write a program that shows the values (in hex) of the expressions 0xFFFF^0x8888, 0xABCD & 0x4567, and 0xDCBA | 0x1234.
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ROW_WIDTH       45
+
+#define UPPER_LEFT      0xC9
+#define UPPER_RIGHT     0xBB
+#define UPPER_MIDDLE    0xCB
+
+#define VERTICAL        0xBA
+#define HORISONTAL      0xCD
+
+void draw_box()
+{
+    // This example uses extended ascii characters to present the result
+    char c = 200, i, j;
+
+
+    for (j = 0; j < 7; j++)
+    {
+        switch(j)
+        {
+        case 0: // top row
+            for(i = 0; i<ROW_WIDTH; i++)
+            {
+                switch (i)
+                {
+                case 0: // top left corner
+                    putchar(UPPER_LEFT);
+                    break;
+                case 18: // top middle divider
+                    putchar(UPPER_MIDDLE);
+                    break;
+                case ROW_WIDTH-1: // top right corner
+                    putchar(UPPER_RIGHT);
+                    putchar('\n');
+                    break;
+                default: // line
+                    putchar(HORISONTAL);
+                    break;
+                }
+            }
+            break;
+        case 1: // title row
+            printf("%c %-15s %c %*s %c\n", VERTICAL, "expression", VERTICAL, ROW_WIDTH-22,"result in HEX format", VERTICAL);
+            break;
+        case 2: // title separator row
+
+        case 3:
+            printf("%c 0xFFFF ^ 0x8888 %c %X %c\n", VERTICAL, VERTICAL, 0xFFFF ^ 0x8888, VERTICAL);
+            break;
+
+
+
+        }
+    }
+
+   /* for (i = 0; i < 50; i++)
+    {
+        for (j = 0; j < 7; j++)
+        {
+            switch(j)
+            {
+            case 0: // top row
+                switch (i)
+                {
+                case 0: // top left corner
+                    putchar(UPPER_LEFT);
+                    break;
+                case 18: // top middle divider
+                    putchar(UPPER_MIDDLE);
+                    break;
+                case 49: // top right corner
+                    putchar(UPPER_RIGHT);
+                    putchar('\n');
+                    break;
+                default: // line
+                    putchar(HORISONTAL);
+                    break;
+                }
+                break;
+            case 1: // title row
+                printf("%c expression      %c result in HEX format %c\n", VERTICAL, VERTICAL, VERTICAL);
+                break;
+            case 2: // title separator row
+
+            case 3:
+                printf("%c 0xFFFF ^ 0x8888 %c %X %c\n", VERTICAL, VERTICAL, 0xFFFF ^ 0x8888, VERTICAL);
+                break;
+
+
+
+            }
+        }
+    }*/
+}
+
+int main()
+{
+    draw_box();
+    //printf("expression      | result in HEX format\n");
+    //printf("0xFFFF ^ 0x8888 | %X\n", 0xFFFF ^ 0x8888);
+    printf("0xABCD & 0x4567 | %X\n", 0xABCD & 0x4567);
+    printf("0xDCBA | 0x1234 | %X\n", 0xDCBA | 0x1234);
+
+    return 0;
+}
