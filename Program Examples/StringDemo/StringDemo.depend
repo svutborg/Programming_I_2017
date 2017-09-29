@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1506672811 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\stringdemo\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
