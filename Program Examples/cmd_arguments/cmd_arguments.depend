@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1507028878 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\cmd_arguments\main.c
+	<stdio.h>
+	<stdlib.h>
+
