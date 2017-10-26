@@ -1,0 +1,14 @@
+Here is a sample:
+Employee Name: B. Smith
+Employee ID #: 0001
+
+What's your name?
+What's your ID number?
+
+Here are what you entered:
+Employee Name: hejsa
+Employee ID #: 0043
+
+
+
+5
