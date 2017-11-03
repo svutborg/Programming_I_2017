@@ -18,6 +18,8 @@
 #define WINDOW_HEIGHT 2*(ROWS+1)+2
 #define STARTING_CASH 1000
 #define MINIMUM_BET 10
+#define DEALER_STAND_VALUE 17
+#define BLACKJACK 21
 
 /*
     Typedefinitions go here
@@ -51,7 +53,6 @@ typedef struct
     hand h;
     int cash;
     int bet;
-    bool is_dealer;
 } player;
 
 typedef struct
@@ -77,14 +78,9 @@ char screenBuffer[WINDOW_HEIGHT][WINDOW_WIDTH+1];
 void populate_deck(deck *d);
 void shuffle_deck(deck *d);
 int bounded_random(int lower_bound, int upper_bound);
-void deal_card(deck *d, player *p);
-void new_player(player* p, int cash, bool dealer);
-void print_frame();
-void initialise_screen_buffer();
-void initialise_game(game *g, deck *d);
-char *card_to_string(card *c, char *res);
-void insert_string(char *destination, char *ins);
-void clear_buffer_space(char *start, int number);
+void print_card(card *c);
+void print_hand(hand *h);
+void print_deck(deck *d);
 void update_screen_buffer(game *g);
 
 /*
@@ -119,7 +115,7 @@ int bounded_random(int lower_bound, int upper_bound)
     return (rand()*(upper_bound-lower_bound))/RAND_MAX+lower_bound;
 }
 
-void deal_card(deck *d, player *p)
+void deal_card(deck *d, player *p, game *g)
 {
     hand *h = &p->h;
     int hval = 0, lval = 0;
@@ -135,13 +131,18 @@ void deal_card(deck *d, player *p)
     }
     h->high_sum += hval;
     h->low_sum += lval;
+    update_screen_buffer(g);
 }
 
-void new_player(player* p, int cash, bool dealer)
+void print_card(card* c)
+{
+    printf("\t%s of %s\n", value_names[c->value], suit_names[c->suit]);
+}
+
+void new_player(player* p, int cash)
 {
     p->cash = cash;
     p->bet = 0;
-    p->is_dealer = dealer;
     p->h.num_cards = 0;
     p->h.low_sum = 0;
     p->h.high_sum = 0;
@@ -199,10 +200,10 @@ void initialise_game(game *g, deck *d)
     shuffle_deck(d);
 
     /* Initialise players */
-    new_player(&g->dealer, 0, true);
+    new_player(&g->dealer, 0);
     for (i = 0; i < NUMBER_OF_PLAYERS; i++)
     {
-        new_player(&g->players[i], STARTING_CASH, false);
+        new_player(&g->players[i], STARTING_CASH);
     }
 }
 
@@ -234,10 +235,10 @@ void clear_buffer_space(char *start, int number)
 void update_screen_buffer(game *g)
 {
     int j;
-
     char *buf = calloc(SPLIT_WIDTH,1);
     char *cash = calloc(SPLIT_WIDTH,1);;
 
+    initialise_screen_buffer();
     for(j = 0; j < g->dealer.h.num_cards; j++)
     {
         card_to_string(&g->dealer.h.cards[j], buf);
@@ -255,12 +256,30 @@ void update_screen_buffer(game *g)
     clear_buffer_space(&screenBuffer[ROWS+4][4], SPLIT_WIDTH-4);
     insert_string(&screenBuffer[ROWS+4][4], cash);
     print_frame();
+    Sleep(200);
+}
+
+void clear_hand(player *p)
+{
+    new_player(p, p->cash);
+}
+
+void loose(player *p)
+{
+    p->bet = 0;
+}
+
+void win(player *p)
+{
+    p->cash += 2*p->bet;
+    p->bet = 0;
 }
 
 int main()
 {
     /* Declare variables */
-    int bet;
+    int bet, dealer_best, player_best;
+    bool over = true;;
     char input;
     deck d;
     game g;
@@ -273,11 +292,12 @@ int main()
     Sleep(500);
     while(1)
     {   // gameplay
+        clear_hand(&g.dealer);
+        clear_hand(&g.players[0]);
+        over = false;
         update_screen_buffer(&g);
         printf("Make your bet:");
         scanf("%d", &bet);
-        printf("%d", bet);
-        Sleep(1000);
         if(bet > g.players[0].cash)
         {
             printf("You cannot bet more than you have in cash. Make another bet.");
@@ -295,18 +315,114 @@ int main()
                 fflush(stdin);
                 g.players[0].bet = bet;
                 g.players[0].cash -= bet;
-                deal_card(&d, &g.dealer);
-                deal_card(&d, &g.players[0]);
-                deal_card(&d, &g.players[0]);
-                update_screen_buffer(&g);
+                deal_card(&d, &g.dealer, &g);
+                deal_card(&d, &g.players[0], &g);
+                deal_card(&d, &g.players[0], &g);
                 while( (input = getchar()) != 'S')
                 {
-                    deal_card(&d, &g.players[0]);
+                    fflush(stdin);
+                    deal_card(&d, &g.players[0], &g);
+                    if(g.players[0].h.low_sum > BLACKJACK)
+                    {
+                        printf("You loose!");
+                        loose(&g.players[0]);
+                        getchar();
+                        over = true;
+                        break;
+                    }
+                    else if( (g.players[0].h.low_sum == BLACKJACK) || (g.players[0].h.high_sum == BLACKJACK) || (g.players[0].h.num_cards >= CARDS_IN_A_HAND))
+                    {
+                        printf("You win!");
+                        win(&g.players[0]);
+                        getchar();
+                        over = true;
+                        break;
+                    }
+                }
 
+                while( (g.dealer.h.low_sum < DEALER_STAND_VALUE) && (!over) )
+                {
+                    if((g.dealer.h.low_sum > DEALER_STAND_VALUE) && (g.dealer.h.low_sum < BLACKJACK))
+                    {
+                        break;
+                    }
+                    deal_card(&d, &g.dealer, &g);
+                    if(g.dealer.h.low_sum > BLACKJACK)
+                    {
+                        printf("House looses!");
+                        win(&g.players[0]);
+                        getchar();
+                        over = true;
+                        break;
+                    }
+                    else
+                    if(g.dealer.h.num_cards >= CARDS_IN_A_HAND)
+                    {
+                        printf("You loose!");
+                        loose(&g.players[0]);
+                        getchar();
+                        over = true;
+                        break;
+                    }
+                }
+
+                if(!over)
+                {
+                    player_best = -1;
+                    if(g.players[0].h.high_sum < BLACKJACK)
+                    {
+                        player_best = g.players[0].h.high_sum;
+                    }
+                    else if (g.players[0].h.low_sum < BLACKJACK)
+                    {
+                        player_best = g.players[0].h.low_sum;
+                    }
+
+                    dealer_best = -1;
+                    if(g.dealer.h.high_sum < BLACKJACK)
+                    {
+                        dealer_best = g.dealer.h.high_sum;
+                    }
+                    else if (g.dealer.h.low_sum < BLACKJACK)
+                    {
+                        dealer_best = g.dealer.h.low_sum;
+                    }
+
+                    if ( player_best > dealer_best)
+                    {
+                        printf("Player wins!");
+                        win(&g.players[0]);
+                    }
+                    else
+                    {
+                        printf("House wins!");
+                        loose(&g.players[0]);
+                    }
+                    fflush(stdin);
+                    getchar();
                 }
             }
         }
         getchar();
+        fflush(stdin);
     }
     return 0;
+}
+
+void print_hand(hand *h)
+{
+    int i;
+    for (i = 0; i < h->num_cards; i++)
+    {
+        print_card(&(h->cards[i]));
+    }
+}
+
+void print_deck(deck *d)
+{
+    int i;
+    for (i = 0; i < d->num_cards; i++)
+    {
+        print_card(&(d->cards[i]));
+    }
 }
