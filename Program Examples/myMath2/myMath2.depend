@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1510044425 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\mymath2\main.c
+	<stdio.h>
+	<stdlib.h>
+	"myMath.h"
+
+1510044345 c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\mymath2\mymath.h
+
+1510044325 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\mymath2\mymath.c
+	"myMath.h"
+

@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1510054110 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\main.c
+	<stdio.h>
+	<stdlib.h>
+	"stack.h"
+
+1510054021 c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\stack.h
+
+1510050755 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\stack.c
+	<stdlib.h>
+	"stack.h"
+
