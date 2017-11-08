@@ -2,12 +2,12 @@
 #define STACK_H_INCLUDED
 
 // Definition to determine the datatype of the stack elements
-#define MYSTACKTYPE int
+#define MYSTACK_TYPE int
 
 // Type for each element of a stack
 typedef struct _element
 {
-    MYSTACKTYPE data;
+    MYSTACK_TYPE data;
     struct _element *next;
 } element;
 
@@ -15,11 +15,12 @@ typedef struct _element
 typedef struct
 {
     element *top;
+    int num_elements;
 } myStack;
 
 // Prototypes for the functions that manipulates the stack
 void myStackInit(myStack *s);
-void myStackPush(myStack *s, MYSTACKTYPE data);
-MYSTACKTYPE myStackPop(myStack *s);
+void myStackPush(myStack *s, MYSTACK_TYPE data);
+MYSTACK_TYPE myStackPop(myStack *s);
 
 #endif // STACK_H_INCLUDED

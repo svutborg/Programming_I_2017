@@ -8,15 +8,21 @@ int main()
     myStack s;
     myStackInit(&s);
 
-    // Adds(pushes) elements to the stack
-    myStackPush(&s, 42);
-    myStackPush(&s, 5);
-    myStackPush(&s, -17);
+    int i, j;
 
-    // Removes(pops) elements from the stack
-    printf("%d", myStackPop(&s));
-    printf("%d", myStackPop(&s));
-    printf("%d", myStackPop(&s));
+    for(i = 0; i < 2000000; i++)
+    {
+        myStackPush(&s, i);
+    }
+
+    for(i = 0; i < 2000000; i++)
+    {
+        j = myStackPop(&s);
+        if(j%75000 == 0)
+        {
+            printf("%d\n", j);
+        }
+    }
 
     return 0;
 }
