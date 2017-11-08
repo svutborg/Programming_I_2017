@@ -22,5 +22,6 @@ typedef struct
 void myStackInit(myStack *s);
 void myStackPush(myStack *s, MYSTACK_TYPE data);
 MYSTACK_TYPE myStackPop(myStack *s);
+void myStackDispose(myStack *s);
 
 #endif // STACK_H_INCLUDED

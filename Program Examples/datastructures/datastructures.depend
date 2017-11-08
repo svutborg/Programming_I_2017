@@ -1,12 +1,19 @@
 # depslib dependency file v1.0
-1510134380 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\main.c
+1510152351 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\main.c
 	<stdio.h>
 	<stdlib.h>
 	"stack.h"
+	"dynarray.h"
 
-1510135105 c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\stack.h
+1510151740 c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\stack.h
 
-1510134363 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\stack.c
+1510151702 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\stack.c
 	<stdlib.h>
 	"stack.h"
+
+1510151141 source:c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\dynarray.c
+	<stdlib.h>
+	"dynarray.h"
+
+1510150770 c:\users\svu\onedrive - university college nordjylland\ucn\courses\programming i\programming_i_2017\program examples\datastructures\dynarray.h
 

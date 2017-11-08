@@ -1,37 +1,49 @@
 #include <stdlib.h>
 #include "dynarray.h"
 
-void *myDynarrayInit(myDynarray *a, int number)
+
+status myDynarrayInit(myDynarray *a, int number)
 {
-    a->data = malloc(number*sizeof(mydata));
+    a->data = malloc(number*sizeof(MYDYNARRAY_TYPE));
     a->elements = 0;
     a->max = number;
-    return a->data;
+    return a->data == NULL ? failure : success;
 }
 
-void myDynarrayAdd(myDynarray *a, mydata data)
+status myDynarrayAdd(myDynarray *a, int data)
 {
     if(a->elements == a->max)
     {
-        if(myDynarrayIncreaseSize(a) != NULL)
+        if(myDynarrayIncreaseSize(a) == NULL)
         {
-            a->data[lements] = data;
-            a->elements++;
+            return failure;
         }
+    }
+    a->data[a->elements] = data;
+    a->elements++;
+    return success;
+}
+
+void myDynarraySet(myDynarray *a, MYDYNARRAY_TYPE data, int index)
+{
+    if(index < a->max)
+    {
+        a->data[index] = data;
+        if (index > a->elements - 1)
+            a->elements = index+1;
     }
 }
 
-void myDynarraySet(myDynarray *a, mydata data, int index)
+MYDYNARRAY_TYPE myDynarrayGet(myDynarray *a, int index)
 {
-
+    if(index < a->elements)
+    {
+        return a->data[index];
+    }
+    return (MYDYNARRAY_TYPE)failure;
 }
 
-mydata myDynarrayGet(myDynarray *a, int index)
-{
-
-}
-
-void *myDynarrayDispose(myDynarray *a)
+void myDynarrayDispose(myDynarray *a)
 {
     free(a->data);
 }
@@ -40,13 +52,15 @@ void *myDynarrayIncreaseSize(myDynarray *a)
 {
     int i;
     int new_max = a->max*MYDYNARRAY_GROWTH_RATE;
-    mydata new_array[] = malloc(new_max*sizeof(mydata));
+    //printf("Increasing size: %d -> %d\n", a->max, new_max);
+    MYDYNARRAY_TYPE *new_array = malloc(new_max*sizeof(MYDYNARRAY_TYPE));
     if(new_array != NULL)
     {
         for (i = 0; i < a->elements; i++)
         {
             new_array[i] = a->data[i];
         }
+        free(a->data);
         a->data = new_array;
         a->max = new_max;
     }

@@ -12,7 +12,7 @@ void myStackInit(myStack *s)
 
 // stack push adds an element to the stack, given by the reference s
 // This allocates and populates a new element for the stack and updates the stack's top pointer to the new element
-void myStackPush(myStack *s, MYSTACKTYPE data)
+void myStackPush(myStack *s, MYSTACK_TYPE data)
 {
     element *e = malloc(sizeof(element));
     if(e != NULL)
@@ -24,15 +24,15 @@ void myStackPush(myStack *s, MYSTACKTYPE data)
     }
 }
 
-// stack pop removes the top element from the given stack by temporarely storing the element reference and data of the top element
+// stack pop removes the top element from the given stack by temporarily storing the element reference and data of the top element
 // and updating the top pointer to the element pointed to by this element
 // subsequently frees the element to be popped and returns the data
-MYSTACKTYPE myStackPop(myStack *s)
+MYSTACK_TYPE myStackPop(myStack *s)
 {
     if(s->top != NULL)
     {
         element *e = s->top;
-        MYSTACKTYPE data = e->data;
+        MYSTACK_TYPE data = e->data;
         s->top = s->top->next;
         free(e);
         s->num_elements--;
@@ -40,6 +40,12 @@ MYSTACKTYPE myStackPop(myStack *s)
     }
     else
     {
-        return NULL;
+        return (MYSTACK_TYPE)NULL;
     }
+}
+
+// stack dispose will continue to pop elements until there are no elements left
+void myStackDispose(myStack *s)
+{
+    while(myStackPop(s));
 }
